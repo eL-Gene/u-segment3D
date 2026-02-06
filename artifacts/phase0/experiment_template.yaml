@@ -1,0 +1,45 @@
+experiment:
+  run_id: ""
+  purpose: ""
+  commit_sha: ""
+  output_dir: ""
+
+data:
+  dataset_version: ""
+  split_version: "v1"
+  manifest_path: "artifacts/phase0/data_manifest.csv"
+  splits_path: "artifacts/phase0/splits_v1.json"
+
+model:
+  fusion_mode: "baseline"
+  entrypoint: ""
+  checkpoint: ""
+
+training:
+  enabled: false
+  epochs: 0
+  max_steps: 0
+  batch_size: 0
+  num_workers: 0
+  precision: "fp32"
+
+evaluation:
+  metrics:
+    - "instance_iou"
+    - "dice"
+    - "flow_consistency_error"
+  hard_region_eval: true
+  robustness:
+    enabled: false
+    corruptions: []
+    severities: []
+
+runtime:
+  device: ""
+  gpu_count: 0
+  walltime_limit_hours: 0
+  checkpoint_interval_minutes: 30
+
+logging:
+  registry_path: "artifacts/phase0/run_registry.csv"
+  baseline_metrics_path: "artifacts/phase0/baseline_metrics.csv"
