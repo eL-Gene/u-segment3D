@@ -53,7 +53,12 @@ The current library is still a work-in-progress. It is fully functional but docu
 </p>
 
 ## Dependencies
-u-Segment3D has a number of dependencies detailed in the requirements.txt. GPU dependencies are based on installing Cellpose to use as the default 2D segmentation method in u-Segment3D. 
+u-Segment3D dependencies are defined in `pyproject.toml`.
+
+Optional extras from source install:
+- `gpu`: installs `cupy-cuda11x` for CUDA-accelerated resizing on non-MacOS systems.
+- `dev`: installs developer tooling (`build`, `pytest`, `twine`).
+- `all`: installs both `gpu` and `dev`.
 
 
 ## Installation
@@ -64,7 +69,21 @@ conda install -n u_Segment3D_env -c conda-forge scikit-fmm
 pip install u-Segment3D
 ```
 
-u-Segment3D can also be installed by git cloning the repository and running pip in the cloned folder with python 3.9-3.12. We have developed on Python==3.9 on Red Hat Enterprise Linux Server 7.9. `pyproject.toml` configures the individual dependencies for each OS.
+u-Segment3D can also be installed from source with editable mode:
+```
+git clone https://github.com/DanuserLab/u-segment3D.git
+cd u-segment3D
+pip install -e .
+```
+
+To include optional extras:
+```
+pip install -e ".[gpu]"   # CUDA-accelerated extras (non-MacOS)
+pip install -e ".[dev]"   # tooling for development/testing
+pip install -e ".[all]"   # all optional extras
+```
+
+We have developed on Python==3.9 on Red Hat Enterprise Linux Server 7.9. `pyproject.toml` configures dependencies for each OS.
 
 ### Linux
 We suggest first creating a new conda environment for install and use conda to install cudatoolkit and cudnn first: 
@@ -72,7 +91,9 @@ We suggest first creating a new conda environment for install and use conda to i
 conda create -n u_Segment3D_env python=3.9 cudatoolkit=11.8.* cudnn==8.* -c anaconda
 conda install -n u_Segment3D_env -c conda-forge scikit-fmm
 conda activate u_Segment3D_env
-pip install .
+pip install -e .
+# Optional CUDA extras:
+pip install -e ".[gpu]"
 ```
 If on a HPC cluster, depending on the way it is setup, you may need to module load the cuda corresponding to the install, `module load cuda118/toolkit/11.8.0` prior to activating the conda environment to use the installed `cupy` library functions for image resizing. Otherwise, u-Segment3D will fall back to a `pytorch` version of image resizing. Don't worry, this still uses gpu, but is slower than using cupy.
 
@@ -92,7 +113,9 @@ conda install -n u_Segment3D_env pyicu -c conda-forge # tries to install a preco
 ```
 conda create -n u_Segment3D_env python=3.9 cudatoolkit=11.8.* cudnn==8.* -c anaconda
 conda activate u_Segment3D_env
-pip install .
+pip install -e .
+# Optional CUDA extras:
+pip install -e ".[gpu]"
 ```
 On machine with NVIDIA graphics card, check to see if torch has been correctly installed with GPU by importing the library in Python. 
 ```
@@ -112,7 +135,7 @@ conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvi
 
 **Errors we have encountered:**
 
-1. Installing `scikit-fmm` fails, because it cannot be compiled. To resolve, install precompiled binary version through `conda-forge` before running `pip install .`
+1. Installing `scikit-fmm` fails, because it cannot be compiled. To resolve, install precompiled binary version through `conda-forge` before running `pip install -e .`
 ```
 conda install -n u_Segment3D_env scikit-fmm -c conda-forge
 ```
@@ -123,7 +146,7 @@ NVIDIA CUDA is not available for MacOS with Apple Silicon chips. Therefore don't
 conda create -n u_Segment3D_env python=3.9
 conda install -n u_Segment3D_env -c conda-forge scikit-fmm
 conda activate u_Segment3D_env
-pip install .
+pip install -e .
 ```
 
 ## Getting Started
